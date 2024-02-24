@@ -12,7 +12,7 @@ import (
 
 func setUpRoutes(router *gin.Engine, postgresqlGormDB database.DB) {
 	lruCacheStore := store.NewLRUCacheStore(postgresqlGormDB)
-	lruCacheService := services.NewLRUCache(lruCacheStore, 3)
+	lruCacheService := services.NewLRUCache(lruCacheStore, 1024)
 	lruCacheController := controller.NewLruCacheController(lruCacheService)
 	ctx := context.Background()
 	lruCacheStore.StartExpiredKeysDeletion(ctx)
