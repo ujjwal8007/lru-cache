@@ -7,7 +7,7 @@ import (
 )
 
 func ConnectToPostgreSQL() (*gorm.DB, error) {
-	dsn := "host=" + "13.49.66.191" +
+	dsn := "host=" + "localhost" +
 		" user=" + "postgres" +
 		" password=" + "123456" +
 		" dbname=" + "lru_cache_initial" +
