@@ -7,10 +7,10 @@ import (
 )
 
 func ConnectToPostgreSQL() (*gorm.DB, error) {
-	dsn := "host=" + "127.0.0.1" +
+	dsn := "host=" + "13.49.66.191" +
 		" user=" + "postgres" +
-		" password=" + "postgres" +
-		" dbname=" + "dblrucache" +
+		" password=" + "123456" +
+		" dbname=" + "lru_cache_initial" +
 		" port=" + "5432" +
 		" sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
