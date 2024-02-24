@@ -65,7 +65,6 @@ func (lru *LRUCache) Put(ctx context.Context, req models.SetKeyRequest) error {
 }
 
 func (lru *LRUCache) Get(ctx context.Context, key string) (models.GetKeyResponse, error) {
-	lru.lruCacheStore.DeleteExpiredKeys(ctx)
 	entity, err := lru.lruCacheStore.GetEntityByKey(ctx, key)
 	if err != nil {
 		// Key not found

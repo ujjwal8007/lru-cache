@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/ujjwal8007/database"
@@ -16,6 +17,7 @@ type LRUCacheStore interface {
 	GetLeastRecentlyUsedEntity(ctx context.Context) (entity.LRUCache, error)
 	DeleteEntity(ctx context.Context, entity entity.LRUCache) error
 	DeleteExpiredKeys(ctx context.Context) error
+	StartExpiredKeysDeletion(ctx context.Context)
 }
 
 type lruCacheStore struct {
@@ -76,4 +78,25 @@ func (s *lruCacheStore) DeleteExpiredKeys(ctx context.Context) error {
 		return err
 	}
 	return nil
+}
+
+func (s *lruCacheStore) StartExpiredKeysDeletion(ctx context.Context) {
+	go func() {
+		ticker := time.NewTicker(1 * time.Second) // Adjust the interval as needed
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <-ctx.Done():
+				// Context cancellation, stop the ticker and exit the goroutine
+				return
+			case <-ticker.C:
+				// Delete expired keys
+				if err := s.DeleteExpiredKeys(ctx); err != nil {
+					// Log the error or handle it as needed
+					fmt.Printf("Error deleting expired keys: %v\n", err)
+				}
+			}
+		}
+	}()
 }
